@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+</head>
+<body onload="loadPage()">
+<div>
+    <label id="hahaha"></label>
+</div>
+</body>
+<script>
+    function getCookie(cname) {
+        const name = cname + "=";
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) === ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) === 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+    function loadPage() {
+        const username = getCookie("username");
+        const message = document.getElementById("hahaha");
+        const myText = document.createTextNode("Hello " + username);
+        message.appendChild(myText);
+    }
+</script>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="styles.css">
+    <!-- <script type="text/javascript" src="script.js"></script> -->
+</head>
+<body>
+    <h1 id = "myHeader">Item Search</h1>
+
+    <div class="float">
+        <p><label>Keyword : </label>
+            <input type="text" id="keyword">
+        </p>
+        <p>
+            <label>Category</label>
+            <select id="category">
+                <option value = "Art"> Art </option>
+                <option value = "Books" selected> Books </option>
+                <option value = "Electronics"> Electronics </option>
+                <option value = "Home & Garden"> Home & Garden </option>
+                <option value = "Sporting Goods"> Sporting Goods </option>
+                <option value = "toys"> toys </option>
+                <option value = "others"> others </option>
+            </select>
+        </p>
+        <p><label>Minimum Price $: </label>
+            <input type="text" id="minPrice"></p>
+        <p><label>Maximum Price $: </label>
+            <input type="text" id="maxPrice"></p>
+        <p>
+            <label>Condition at least:</label>
+            <select id="condition">
+                <option value = "New"> New </option>
+                <option value = "Very Good"> Very Good </option>
+                <option value = "Good" selected> Good </option>
+                <option value = "Fair"> Fair </option>
+                <option value = "Poor"> Poor </option>
+            </select>
+        </p>
+        <button>Cancel</button>
+        <button type="submit" onclick="search();">Search</button>
+    </div> <br>
+    <div id="result"></div>
+
+</body>
+<script>
+    function search() {
+    const keyword = document.getElementById("keyword").value;
+    const category = document.getElementById("category").value;
+    const min_price = document.getElementById("minPrice").value;
+    const max_price = document.getElementById("maxPrice").value;
+    const condition = document.getElementById("condition").value;
+
+    let data = {};
+    if (keyword.length > 0) {
+        data['keyword'] = keyword;
+    }
+    if (min_price.length > 0){
+        data['min_price'] = min_price;
+    }
+    if (max_price.length > 0){
+        data['max_price'] = max_price;
+    }
+    //alert(data['max_price'])
+    var result = document.getElementById("result");
+    result.innerHTML = "";
+    //result.element.className += "float";
+    var table = document.createElement("table");
+    table.setAttribute('border', '1');
+    //table.element.className += "float";
+
+    const url = 'http://localhost/search_item';
+    const data_str = JSON.stringify(data);
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = "text";
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+
+            const response = JSON.parse(xhr.responseText);
+            for (var i in response) {
+                var obj = response[i];
+                // write header
+                if (i === '0') {
+                    //console.log(i.toString());
+                    var trh = document.createElement("tr");
+                    for (var key in obj) {
+                        //console.log(key);
+                        var th = document.createElement("th");
+                        th.innerHTML += key;
+                        trh.appendChild(th);
+                    }
+                    table.appendChild(trh);
+                }
+                var tr = document.createElement("tr");
+                for (var key in obj) {
+                    var value = obj[key];
+                    //console.log(key + " " + value);
+                    var cell = document.createElement("td");
+                    cell.innerHTML += value;
+                    tr.appendChild(cell)
+                }
+                table.appendChild(tr);
+            }
+            result.appendChild(table);
+        }
+    };
+
+    xhr.open("POST", url);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.send(data_str);
+}
+</script>
+</html>

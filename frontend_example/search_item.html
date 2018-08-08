@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="./mycss.css" type="text/css">
+</head>
+<body>
+<div class="logindiv">
+    <label><b>Keyword</b></label>
+    <input type="text" id="key">
+    <br>
+
+    <label><b>Minimum Price</b></label>
+    <input type="text" id="min">
+    <br>
+
+    <label><b>maximum Price</b></label>
+    <input type="text" id="max">
+    <br>
+
+    <button type="submit" onclick="search();">Search</button>
+    <br>
+</div>
+
+</body>
+<script>
+    function search() {
+        const keyword = document.getElementById("key").value;
+        const minPrice = document.getElementById("min").value;
+        const maxPrice = document.getElementById("max").value;
+        let data = {};
+        if (keyword.length > 0) {
+            data['keyword'] = keyword;
+        }
+        if (minPrice.length > 0){
+            data['minPrice'] = minPrice;
+        }
+        if (maxPrice.length > 0) {
+            data['maxPrice'] = maxPrice;
+        }
+
+        const url = 'http://localhost/search_item';
+        const data2 = JSON.stringify(data);
+        const xhr = new XMLHttpRequest();
+        xhr.responseType = 'text';
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                const response = JSON.parse(xhr.responseText);
+                alert(xhr.responseText);
+            }
+        };
+        xhr.open('POST', url);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send(data2);
+    }
+</script>
+</html>

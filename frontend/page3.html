@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="styles.css">
+    <!-- <script type="text/javascript" src="script.js"></script> -->
+</head>
+<body>
+    <h1 id = "myHeader"> New Item For Auction</h1>
+
+    <div class="float">
+        <p><label>Item Name: </label>
+            <input type="text" id="itemName">
+        </p>
+        <p><label>Description: </label>
+            <input type="text" id="description"></p>
+        <p>
+            <label>Category</label>
+            <select id="category">
+                <option value = "Art"> Art </option>
+                <option value = "book" selected> Books </option>
+                <option value = "Electronics"> Electronics </option>
+                <option value = "Home"> Home & Garden </option>
+                <option value = "Sporting Goods"> Sporting Goods </option>
+                <option value = "toys"> toys </option>
+                <option value = "others"> others </option>
+            </select>
+        </p>
+        <p>
+            <label>Condition</label>
+            <select id="condition">
+                <option value = "new"> New </option>
+                <option value = "very_good"> Very Good </option>
+                <option value = "good" selected> Good </option>
+                <option value = "fair"> Fair </option>
+                <option value = "poor"> Poor </option>
+            </select>
+        </p>
+        <p><label>Start auction bidding at $: </label>
+            <input type="text" id="startPrice">
+        </p>
+        <p><label>Minimum sale price $: </label>
+            <input type="text" id="minSalePrice">
+        </p>
+        <p>
+            <label>Auction ends in:</label>
+            <select id="endTime">
+            <option value = "1">1 day</option>
+            <option value = "3" selected>3 day</option>
+            <option value = "5">5 day</option>
+            <option value = "7">7 day</option>
+            </select>
+        </p>
+        <p>
+            <label>Get it Now price $: </label>
+            <input type="text" id="getItNowPrice">
+        </p>
+        <p>
+            <label>Returns Accepted? </label>
+            <input type="checkbox" id="returnAccept">
+        </p>
+        <button> Cancel </button>
+        <button type="submit" onclick="new_item();"> List My Item </button>
+    </div>
+</body>
+<script>
+    function new_item() {
+        var item_name = document.getElementById("itemName").value;
+        var description = document.getElementById("description").value;
+        var category = document.getElementById("category").value;
+        var condition = document.getElementById("condition").value;
+        var start_price = document.getElementById("startPrice").value;
+        var min_price = document.getElementById("minSalePrice").value;
+        var end_time = document.getElementById("endTime").value;
+        var get_it_now_price = document.getElementById("getItNowPrice").value;
+        var returnAccept = document.getElementById("returnAccept");
+        var returnable = 0;
+        if (returnAccept.checked){
+            returnable = 1;
+        }
+
+        console.log(end_time);
+        var url = 'http://localhost/new_item';
+        var data = JSON.stringify({"item_name": item_name, "description": description,
+                "category": category, "condition": condition,
+                "start_price": start_price, "min_price": min_price,
+                "end_time": end_time, "get_it_now_price": get_it_now_price,
+                "returnable": returnable, "user_id": 12});
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", url);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                alert(response["message"]);
+            }
+        };
+        xhr.send(data);
+    }
+</script>
+</html>

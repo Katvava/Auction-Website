@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GT Bay</title>
+    <link rel="stylesheet" href="./mycss.css" type="text/css">
+</head>
+<body>
+<div class="logindiv">
+    <label for="uname"><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" id="uname" required>
+    <br>
+    <br>
+
+    <label for="psw"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" id="psw" required>
+    <br>
+    <label class="error" id="error_message"></label>
+    <br><br>
+
+    <button type="submit" onclick="login();">Login</button>
+    <br>
+</div>
+</body>
+<script>
+    function setCookie(cname, cvalue, exdays) {
+        const d = new Date();
+        d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        const expires = "expires="+ d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+
+    function login() {
+        const url = 'http://localhost/login';
+        const username = document.getElementById("uname").value;
+        const password = document.getElementById("psw").value;
+        const data = JSON.stringify({username: username, password: password});
+        const xhr = new XMLHttpRequest();
+        xhr.responseType = 'text';
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                const response = JSON.parse(xhr.responseText);
+                if (response['result'] === true) {
+                    Object.keys(response["data"]).forEach(
+                        function (key) {
+                            setCookie(key, response["data"][key]);
+                        }
+                    );
+                    window.location.pathname = "/javascript_learning/main.html";
+                }
+                else {
+                    const error_message = document.getElementById("error_message");
+                    const error_text = document.createTextNode(response['message']);
+                    error_message.appendChild(error_text);
+                }
+            }
+        };
+        xhr.open('POST', url);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send(data);
+    }
+</script>
+</html>
+

@@ -1,0 +1,11 @@
+
+div.logindiv {
+    text-align: center;
+    width: 1500px;
+    height: 1000px;
+    font-family: 'Raleway', sans-serif;
+}
+
+.error {
+    color: red;
+}
